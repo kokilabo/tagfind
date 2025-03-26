@@ -1,0 +1,13 @@
+/target
+/debug/
+/release/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+Thumbs.db
