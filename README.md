@@ -20,7 +20,7 @@ cargo install tagfind
 
 ### プリビルドバイナリ
 
-プラットフォーム別のプリビルドバイナリは[リリースページ](https://github.com/yourusername/tagfind/releases/latest)からダウンロードできます。
+プラットフォーム別のプリビルドバイナリは[リリースページ](https://github.com/kokilabo/tagfind/releases/latest)からダウンロードできます。
 
 対応プラットフォーム:
 - Linux (x86_64)
