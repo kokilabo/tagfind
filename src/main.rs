@@ -9,14 +9,14 @@ use serde::{Deserialize, Serialize};
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 struct Cli {
-    /// タグ名または'add'コマンド
+    /// Tag name or 'add' command
     command_or_tag: String,
 
-    /// addコマンドの場合: ファイル名、それ以外の場合: 無視
+    /// For 'add' command: filename, otherwise: ignored
     #[arg(required = false)]
     file: Option<String>,
 
-    /// addコマンドの場合のタグ名
+    /// Tag name for 'add' command
     #[arg(required = false)]
     tag: Option<String>,
 }
@@ -31,8 +31,8 @@ impl TagDatabase {
         let path = Path::new(".tagfind.json");
         if path.exists() {
             let content = fs::read_to_string(path)
-                .context("タグデータベースの読み込みに失敗しました")?;
-            serde_json::from_str(&content).context("JSONのパースに失敗しました")
+                .context("Failed to read tag database")?;
+            serde_json::from_str(&content).context("Failed to parse JSON")
         } else {
             Ok(Self::default())
         }
@@ -40,9 +40,9 @@ impl TagDatabase {
 
     fn save(&self) -> Result<()> {
         let content = serde_json::to_string_pretty(self)
-            .context("JSONへの変換に失敗しました")?;
+            .context("Failed to convert to JSON")?;
         fs::write(".tagfind.json", content)
-            .context("タグデータベースの保存に失敗しました")
+            .context("Failed to save tag database")
     }
 
     fn add_tag(&mut self, tag: String, file: String) {
@@ -65,20 +65,20 @@ fn main() -> Result<()> {
         if let (Some(file), Some(tag)) = (cli.file, cli.tag) {
             db.add_tag(tag.clone(), file.clone());
             db.save()?;
-            println!("タグ '{}' をファイル '{}' に追加しました", tag, file);
+            println!("Added tag '{}' to file '{}'", tag, file);
         } else {
-            println!("使用方法: tagfind add <ファイル名> <タグ名>");
+            println!("Usage: tagfind add <filename> <tag>");
         }
     } else {
-        // タグ検索
+        // Tag search
         let tag = cli.command_or_tag;
         if let Some(files) = db.find_by_tag(&tag) {
-            println!("タグ '{}' が付いているファイル:", tag);
+            println!("Files with tag '{}':", tag);
             for file in files {
                 println!("  {}", file);
             }
         } else {
-            println!("タグ '{}' が付いているファイルは見つかりませんでした", tag);
+            println!("No files found with tag '{}'", tag);
         }
     }
 
