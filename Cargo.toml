@@ -2,9 +2,26 @@
 name = "tagfind"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+description = "A CLI tool to find files by tags"
+repository = "https://github.com/kokilabo/tagfind"
+
+[workspace]
+members = ["."]
+
+[workspace.metadata.dist]
+targets = ["x86_64-unknown-linux-gnu", "x86_64-apple-darwin", "aarch64-apple-darwin", "x86_64-pc-windows-msvc"]
+installers = ["shell", "powershell"]
+ci = ["github"]
+install-updater = false
 
 [dependencies]
 clap = { version = "4.5", features = ["derive"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 anyhow = "1.0"
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
